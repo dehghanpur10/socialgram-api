@@ -1,0 +1,687 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: internet Engineering project API
+  description: This is a simple API for internet Engineering project API
+servers:
+  - url: https://
+paths:
+  /signup:
+    post:
+      tags:
+        - Authentication
+      summary: sign up user
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - "avatar"
+                    - "password"
+                  properties:
+                    "avatar":
+                      type: string
+                      format: binary
+                    "password":
+                      type: string
+                      example: "adfa##@%fdfd5"
+                - $ref: "#/components/schemas/User"
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      "id":
+                        type: number
+                        example: 1
+                      "image_url":
+                        type: string
+                        example: /img/1.png
+                  - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "username":
+                  type: string
+                  example: dehghanpour
+                "password":
+                  type: string
+                  example: dfasd23gg@@dfdf%&
+      responses:
+        200:
+          description: "Success"
+          headers:
+            accessToken:
+              schema:
+                type: string
+              description: access token for user.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      "id":
+                        type: number
+                        example: 1
+                      "image_url":
+                        type: string
+                        example: /img/1.png
+                  - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /search/{userInfo}:
+    get:
+      tags:
+        - search
+      summary: search for spec username.
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: path
+          name: userInfo
+          description: The user information.
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: page
+          description: The page number for search result.
+          schema:
+            type: number
+          required: true
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      properties:
+                        "id":
+                          type: number
+                          example: 1
+                        "image_url":
+                          type: string
+                          example: /img/1.png
+                    - $ref: "#/components/schemas/User"
+
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /profile:
+    get:
+      tags:
+        - profile
+      summary: fetch profile of user.
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: useId
+          description: user's id that you want fetch it if was empty return profile current user
+          schema:
+            type: number
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      "id":
+                        type: number
+                        example: 1
+                      "image_url":
+                        type: string
+                        example: /img/1.png
+                      "status":
+                        type: string
+                        description: "REQUESTED, FRIEND, NORMAL"
+                        example: "FRIEND"
+                      "posts":
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Post"
+                  - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - profile
+      summary: edit my profile info
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    "avatar":
+                      type: string
+                      format: binary
+                    "password":
+                      type: string
+                      example: "adfa##@%fdfd5"
+                - $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      "id":
+                        type: number
+                        example: 1
+                      "image_url":
+                        type: string
+                        example: /img/1.png
+                  - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /dashboard/{page}:
+    get:
+      tags:
+        - dashboard
+      summary: fetch post of current friends to showing in dashboard page.
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: path
+          name: page
+          description: page of dashabord
+          schema:
+            type: number
+          required: true
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  "posts":
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CompletePost"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /post:
+    post:
+      tags:
+        - post
+      summary: create new post for current user.
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - "user_id"
+                - "title"
+                - "content"
+                - "image"
+              properties:
+                "title":
+                  type: string
+                  example: "new post"
+                "content":
+                  type: string
+                  example: "this is a new post."
+                "image":
+                  type: string
+                  format: binary
+
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompletePost"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - post
+      summary: like and unlike post
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: post_id
+          description: post's id.
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - post
+      summary: delete post
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: post_id
+          description: post's id.
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /request:
+    post:
+      tags:
+        - request
+      summary: create a new request.
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: user_id
+          description: user' id that current user want send request to that
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - request
+      summary: delete request.
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: user_id
+          description: user' id that current user want send request to that
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      tags:
+        - request
+      summary: fetch all sended request for current user
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      responses:
+        200:
+          description: "success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  "users":
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            "id":
+                              type: number
+                              example: 1
+                            "image_url":
+                              type: string
+                              example: /img/1.png
+                        - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - request
+      summary: set status for request
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: user_id
+          description: user' id that current user want send request to that
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: status
+          description: set status "ACCEPT" or "DECLINE"
+          schema:
+            type: string
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /followers:
+    get:
+      tags:
+        - follower
+      summary: fetch all followers for current user
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      responses:
+        200:
+          description: "success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  "users":
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            "id":
+                              type: number
+                              example: 1
+                            "image_url":
+                              type: string
+                              example: /img/1.png
+                        - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - follower
+      summary: delete follower
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: user_id
+          description: user' id that current user want to be delete
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /following:
+    get:
+      tags:
+        - following
+      summary: fetch all following for current user
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  "users":
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            "id":
+                              type: number
+                              example: 1
+                            "image_url":
+                              type: string
+                              example: /img/1.png
+                        - $ref: "#/components/schemas/User"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - following
+      summary: delete following
+      security:
+        - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: user_id
+          description: user' id that current user want to be delete
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: "No Content"
+
+        default:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      required:
+        - title
+      properties:
+        "@type":
+          type: string
+          example: Error
+        title:
+          type: string
+        description:
+          type: string
+
+    User:
+      type: object
+      required:
+        - "name"
+        - "username"
+        - "email"
+        - "gender"
+        - "age"
+        - "city"
+        - "country"
+      properties:
+        "name":
+          type: string
+          example: mohammad
+        "username":
+          type: string
+          example: dehghanpour
+        "email":
+          type: string
+          format: email
+          example: m.dehghnapour10@gmail.com
+        "gender":
+          type: string
+          example: male
+        "age":
+          type: number
+          example: 22
+        "city":
+          type: string
+          example: Tehran
+        "country":
+          type: string
+          example: Iran
+        "interest":
+          type: string
+          example: music, movies, programming
+        "bio":
+          type: string
+          example: boi of user
+    Post:
+      type: object
+      required:
+        - "id"
+        - "user_id"
+        - "title"
+        - "content"
+        - "image_url"
+      properties:
+        "id":
+          type: number
+          example: 1
+        "user_id":
+          type: number
+          example: 1
+        "title":
+          type: string
+          example: new post
+        "content":
+          type: string
+          example: this is a post
+        "imgae_url":
+          type: string
+          example: /img/1.png
+    CompletePost:
+      allOf:
+        - type: object
+          properties:
+            "user":
+              allOf:
+                - type: object
+                  properties:
+                    "id":
+                      type: number
+                      example: 1
+                    "image_url":
+                      type: string
+                      example: /img/1.png
+                - $ref: "#/components/schemas/User"
+        - $ref: "#/components/schemas/Post"
+
+
