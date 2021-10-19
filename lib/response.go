@@ -14,8 +14,14 @@ func InitLog(r *http.Request) {
 	fmt.Printf("%s-%s-%v-", r.Method, r.URL.Path, r.URL.Query())
 }
 
+func HttpOptionsResponseHeaders(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+}
+
 func jsonResponseHeaders(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Content-Type", "application/json")
 }
 
