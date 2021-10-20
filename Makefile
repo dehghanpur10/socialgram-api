@@ -8,6 +8,7 @@ DB_PASSWORD ?= 173946285
 DB_HOST ?= localhost
 DB_PORT ?= 3306
 DB_NAME ?= socialgram
+DB_ENGINE ?= MYSQL
 
 build:
 	go build -o main.exe main.go

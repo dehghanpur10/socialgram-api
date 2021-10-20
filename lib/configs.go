@@ -9,6 +9,7 @@ var (
 	DB_HOST     string
 	DB_PORT     string
 	DB_NAME     string
+	DB_ENGINE   string
 )
 
 func init() {
@@ -18,4 +19,5 @@ func init() {
 	DB_HOST = os.Getenv("DB_HOST")
 	DB_PORT = os.Getenv("DB_PORT")
 	DB_NAME = os.Getenv("DB_NAME")
+	DB_ENGINE = os.Getenv("DB_ENGINE")
 }
