@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"socialgram/models"
 	"sync"
 )
 
@@ -36,12 +37,12 @@ func newMySQLDatabase() (SocialGramStore, error) {
 			connectionErr = err
 			return
 		}
-		migration(database)
+		connectionErr = migration(database)
 		mySQL.DB = database
 	})
 	return mySQL, connectionErr
 }
 
-func migration(db *gorm.DB) {
-	//db.AutoMigrate(&models.User{})
+func migration(db *gorm.DB) error {
+	return db.AutoMigrate(&models.Post{}, &models.User{})
 }
