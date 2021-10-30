@@ -12,7 +12,7 @@ func main() {
 
 	router := routes.Init()
 	http.Handle("/api/v1/", router)
-
+	lib.GetDatabase()
 	err := http.ListenAndServe(lib.SERVER_PORT, router)
 	if err != nil {
 		fmt.Println("main - problem in run server - error: ", err)
