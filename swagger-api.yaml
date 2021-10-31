@@ -23,7 +23,7 @@ paths:
                     - "avatar"
                     - "password"
                   properties:
-                    "avatar":
+                    "image":
                       type: string
                       format: binary
                     "password":
@@ -39,12 +39,21 @@ paths:
                 allOf:
                   - type: object
                     properties:
-                      "id":
+                      "ID":
                         type: number
                         example: 1
+                      "CreatedAt":
+                        type: string
+                        example: "2021-10-31T18:59:46.289+03:30"
+                      "UpdatedAt":
+                        type: string
+                        example: "2021-10-31T18:59:46.289+03:30"
+                      "DeletedAt":
+                        type: string
+                        example: null
                       "image_url":
                         type: string
-                        example: /img/1.png
+                        example: "/static/avatar/731de713-0737-43b2-98c0-8fda77ac2c8d-g.jpg"
                   - $ref: "#/components/schemas/User"
 
         default:
