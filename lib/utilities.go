@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	uuid "github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"log"
 	"net/http"
@@ -96,4 +97,14 @@ func ConvertToJsonBytes(payload interface{}) ([]byte, error) {
 	encoder.SetEscapeHTML(false)
 	err := encoder.Encode(payload)
 	return buffer.Bytes(), err
+}
+
+func HashPassword(password string) (string, error) {
+	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(passwordBytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
