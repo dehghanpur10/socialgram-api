@@ -3,6 +3,8 @@ package lib
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"github.com/gorilla/mux"
 	"net/http"
 	"socialgram/models"
 	"strconv"
@@ -37,5 +39,26 @@ func ParseLoginUserInputFrom(jsonBytes []byte) (*models.User, error) {
 	user := new(models.User)
 	err := json.Unmarshal(jsonBytes, user)
 	return user, err
+}
+
+func GetUserInfoFromPath(r *http.Request) (string, error) {
+	vars := mux.Vars(r)
+	if id, exists := vars["userInfo"]; exists {
+		return id, nil
+	}
+	return "", errors.New("invalid userInfo in path")
+}
+
+func GetPageNumberFromQuery(r *http.Request) (int, error) {
+	values, exists := r.URL.Query()["page"]
+	if !exists || len(values) == 0 || len(values[0]) == 0 {
+		return 0, errors.New("page not found in query")
+	}
+	parseInt, err := strconv.Atoi(values[0])
+	if err != nil {
+		return 0, errors.New("invalid page in query. Must be a number")
+	}
+
+	return parseInt, nil
 }
 
