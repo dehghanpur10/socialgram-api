@@ -10,6 +10,7 @@ var (
 	DB_PORT     string
 	DB_NAME     string
 	DB_ENGINE   string
+	SECRET_KEY  string
 )
 
 func init() {
@@ -20,4 +21,5 @@ func init() {
 	DB_PORT = os.Getenv("DB_PORT")
 	DB_NAME = os.Getenv("DB_NAME")
 	DB_ENGINE = os.Getenv("DB_ENGINE")
+	SECRET_KEY = os.Getenv("SECRET_KEY")
 }

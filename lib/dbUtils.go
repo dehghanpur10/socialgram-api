@@ -31,7 +31,7 @@ func GetDatabase() (SocialGramStore, error) {
 func newMySQLDatabase() (SocialGramStore, error) {
 	onceMySQL.Do(func() {
 		mySQL = new(MySQLDatabase)
-		dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+		dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 		database, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
 		if err != nil {
 			connectionErr = err

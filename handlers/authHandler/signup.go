@@ -89,7 +89,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	userInput.Password = ""
 	jsonBytes, err := lib.ConvertToJsonBytes(userInput)
 	if err != nil {
-		fmt.Println("WorkbenchCreateHandler-json.Marshal error:", err)
+		fmt.Println("json.Marshal - SignUpHandler error:", err)
 		lib.HttpError500(w)
 		return
 	}

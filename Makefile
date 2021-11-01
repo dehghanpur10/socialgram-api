@@ -9,7 +9,7 @@ DB_HOST ?= localhost
 DB_PORT ?= 3306
 DB_NAME ?= socialgram
 DB_ENGINE ?= MYSQL
-
+SECRET_KEY ?= super secret key
 build:
 	go build -o main.exe main.go
 	./main.exe
