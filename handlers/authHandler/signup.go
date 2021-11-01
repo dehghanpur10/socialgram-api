@@ -5,7 +5,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"net/http"
 	"socialgram/lib"
-	"socialgram/models"
 	"strings"
 )
 
@@ -24,7 +23,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userInput, err := models.ParsUserInputFrom(r)
+	userInput, err := lib.ParsUserInputFrom(r)
 	if err != nil {
 		fmt.Println("parseUserInput - SignUpHandler error:", err)
 		lib.HttpError400(w, err.Error())

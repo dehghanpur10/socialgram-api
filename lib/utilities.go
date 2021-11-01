@@ -1,8 +1,6 @@
 package lib
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
@@ -93,13 +91,7 @@ func VerifyPassword(s string) bool {
 	return sevenOrMore && number && upper && special && letter
 }
 
-func ConvertToJsonBytes(payload interface{}) ([]byte, error) {
-	buffer := new(bytes.Buffer)
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(payload)
-	return buffer.Bytes(), err
-}
+
 
 func HashPassword(password string) (string, error) {
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
