@@ -45,6 +45,13 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userInput.Password, err = lib.HashPassword(userInput.Password)
+	if err != nil {
+		fmt.Println(" HashPassword - SignUpHandler error: ", err)
+		lib.HttpError500(w)
+		return
+	}
+
 	userInput.AvatarURL, err = lib.SaveImageInStaticDirectory(r)
 	if err != nil {
 		if strings.Contains(err.Error(), "type") {
