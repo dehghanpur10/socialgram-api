@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	jwt "github.com/dgrijalva/jwt-go"
 	uuid "github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"time"
 	"unicode"
 )
 
@@ -107,4 +109,20 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+func CreateToken(username,email string) (string, error) {
+	//create map claims
+	claims := jwt.MapClaims{}
+	//set data
+	claims["username"] = username
+	claims["email"] = email
+	claims["exp"] = time.Now().Add(time.Minute * 60 * 24 * 7).Unix()
+	//creat token without signed
+	T := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
+	//signed token
+	token, err := T.SignedString([]byte(SECRET_KEY))
+	if err != nil {
+		return "", errors.New("error in signed")
+	}
+	return token, nil
 }

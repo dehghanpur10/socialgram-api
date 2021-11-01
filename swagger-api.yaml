@@ -83,24 +83,18 @@ paths:
       responses:
         200:
           description: "Success"
-          headers:
-            accessToken:
-              schema:
-                type: string
-              description: access token for user.
+
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      "id":
-                        type: number
-                        example: 1
-                      "image_url":
-                        type: string
-                        example: /img/1.png
-                  - $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  "access_token":
+                    type: string
+                    example: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im0uZGVoZ2hhbnBvdXIxMEBnbWFpbC5jb20iLCJleHAiOjE2MzYzODc5MzEsInVzZXJuYW1lIjoiZGVoZ2hhbnB1cjEwIn0.vF5fJ8k35m04eHJlUCyJ-vE_BGCPAALuVTqsqc6-dvCEADitTK56jWUNGpjbaTGAIHMmmRbeKGxxbt8usBn2Ig
+                  "exp":
+                    type: number
+                    example: 1636388105
 
         default:
           description: "Error"

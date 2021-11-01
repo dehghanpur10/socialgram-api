@@ -1,8 +1,10 @@
 package models
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func ParsUserInputFrom(r *http.Request) (*User, error) {
@@ -22,4 +24,20 @@ func ParsUserInputFrom(r *http.Request) (*User, error) {
 	return userInput, err
 }
 
+func ParseLoginUserInputFrom(jsonBytes []byte) (*User, error) {
+	user := new(User)
+	err := json.Unmarshal(jsonBytes, user)
+	return user, err
+}
+
+func NewLoginResponse(token string) *LoginResponse {
+	response := new(LoginResponse)
+	response.AccessToken = token
+	response.EXP = time.Now().Add(time.Minute * 60 * 24 * 7).Unix()
+	return response
+}
+
+func (res *LoginResponse)ToJson()  {
+
+}
 
