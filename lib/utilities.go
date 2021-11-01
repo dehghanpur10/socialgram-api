@@ -1,8 +1,6 @@
 package lib
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
@@ -93,14 +91,6 @@ func VerifyPassword(s string) bool {
 	return sevenOrMore && number && upper && special && letter
 }
 
-func ConvertToJsonBytes(payload interface{}) ([]byte, error) {
-	buffer := new(bytes.Buffer)
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(payload)
-	return buffer.Bytes(), err
-}
-
 func HashPassword(password string) (string, error) {
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(passwordBytes), err
@@ -110,7 +100,8 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
-func CreateToken(username,email string) (string, error) {
+
+func CreateToken(username, email string) (string, error) {
 	//create map claims
 	claims := jwt.MapClaims{}
 	//set data
@@ -125,4 +116,20 @@ func CreateToken(username,email string) (string, error) {
 		return "", errors.New("error in signed")
 	}
 	return token, nil
+}
+
+func ExtractToken(token string) (bool, map[string]interface{}, error) {
+	keyFunction := func(token *jwt.Token) (interface{}, error) {
+		//Make sure that the token method conform to "SigningMethodHMAC"
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(SECRET_KEY), nil
+	}
+	T, err := jwt.Parse(token, keyFunction)
+	if err != nil {
+		return false, make(map[string]interface{}), err
+	}
+	claims, ok := T.Claims.(jwt.MapClaims)
+	return ok, claims, nil
 }

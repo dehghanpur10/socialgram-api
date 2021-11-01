@@ -1,6 +1,6 @@
 package models
 
-type LoginResponse struct {
+type ResponseLogin struct {
 	AccessToken string `json:"access_token"`
-	EXP         int64 `json:"exp"`
+	EXP         int64  `json:"exp"`
 }

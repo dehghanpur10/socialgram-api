@@ -19,3 +19,10 @@ func (mySQL *MySQLDatabase) GetUser(username string) (*models.User, error) {
 	result := mySQL.DB.Where("username = ?", username).First(&user)
 	return user, result.Error
 }
+
+func (mySQL *MySQLDatabase) SearchUsers(userInfo string, pageNumber int) ([]models.User, error) {
+	var users []models.User
+	userInfo = "%" + userInfo + "%"
+	result := mySQL.DB.Offset(pageNumber * PAGE_SIZE).Limit(PAGE_SIZE).Where("username LIKE ? OR name LIKE ?", userInfo, userInfo).Find(&users)
+	return users, result.Error
+}

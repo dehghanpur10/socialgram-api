@@ -1,6 +1,9 @@
 package lib
 
-import "os"
+import (
+	"os"
+	"strconv"
+)
 
 var (
 	SERVER_PORT string
@@ -11,6 +14,7 @@ var (
 	DB_NAME     string
 	DB_ENGINE   string
 	SECRET_KEY  string
+	PAGE_SIZE   int
 )
 
 func init() {
@@ -22,4 +26,5 @@ func init() {
 	DB_NAME = os.Getenv("DB_NAME")
 	DB_ENGINE = os.Getenv("DB_ENGINE")
 	SECRET_KEY = os.Getenv("SECRET_KEY")
+	PAGE_SIZE, _ = strconv.Atoi(os.Getenv("PAGE_SIZE"))
 }
