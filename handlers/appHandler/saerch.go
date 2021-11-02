@@ -25,14 +25,14 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	_, err = lib.GetBearerUser(db, r.Header)
 	if err != nil {
 		fmt.Println("GetBearerUser - SearchHandler error:", err)
-		lib.HttpError400(w, err.Error())
+		lib.HttpError401(w, err.Error())
 		return
 	}
 
 	userInfo, err := lib.GetUserInfoFromPath(r)
 	if err != nil {
 		fmt.Println("GetUserInfoFromPath - SearchHandler error:", err)
-		lib.HttpError400(w, err.Error())
+		lib.HttpError400(w, "invalid user info")
 		return
 	}
 

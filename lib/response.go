@@ -52,7 +52,9 @@ func HttpErrorResponse(w http.ResponseWriter, statusCode int, title, description
 func HttpError400(w http.ResponseWriter, description string) {
 	HttpErrorResponse(w, http.StatusBadRequest, "Bad request", description)
 }
-
+func HttpError401(w http.ResponseWriter, description string) {
+	HttpErrorResponse(w, http.StatusUnauthorized, "Unauthorized", description)
+}
 func HttpError404(w http.ResponseWriter, description string) {
 	HttpErrorResponse(w, http.StatusNotFound, "Not found", description)
 }
