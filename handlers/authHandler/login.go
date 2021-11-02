@@ -27,14 +27,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println("ioutil.ReadAll  - LoginHandler error:", err)
-		lib.HttpError400(w, err.Error())
+		lib.HttpError400(w, "invalid request structure")
 		return
 	}
 
 	userInput, err := lib.ParseLoginUserInputFrom(reqBody)
 	if err != nil {
 		fmt.Println("parseUserInput - LoginHandler error:", err)
-		lib.HttpError400(w, err.Error())
+		lib.HttpError400(w, "invalid user input")
 		return
 	}
 
@@ -48,7 +48,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if strings.Contains(err.Error(), "record not found") {
 			fmt.Println(" GetUser - LoginHandler error:", err)
-			lib.HttpError400(w, "not found username")
+			lib.HttpError404(w, "not found username")
 			return
 		}
 		fmt.Println("GetUser - LoginHandler error:", err)

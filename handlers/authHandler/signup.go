@@ -26,7 +26,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	userInput, err := lib.ParsUserInputFrom(r)
 	if err != nil {
 		fmt.Println("parseUserInput - SignUpHandler error:", err)
-		lib.HttpError400(w, err.Error())
+		lib.HttpError400(w, "page should be number or image field not found")
 		return
 	}
 
@@ -34,7 +34,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	err = validate.Struct(userInput)
 	if err != nil {
 		fmt.Println(" validate - SignUpHandler error: ", err)
-		lib.HttpError400(w, err.Error())
+		lib.HttpError400(w, "invalid user input")
 		return
 	}
 
