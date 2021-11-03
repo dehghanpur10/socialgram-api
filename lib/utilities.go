@@ -61,7 +61,6 @@ func RemoveImage(path string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Print("." + path)
 	err = os.Remove(wd + path)
 	if err != nil {
 		return err

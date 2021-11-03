@@ -44,7 +44,7 @@ func (mySQL *MySQLDatabase) DeletePost(postId, userId uint) error {
 	if result.Error != nil {
 		return result.Error
 	} else if result.RowsAffected < 1 {
-		return errors.New("this post not found or user don't access to remove")
+		return errors.New("user don't access to remove")
 	}
 	return nil
 }

@@ -1,7 +1,9 @@
 package postHandler
 
 import (
+	"errors"
 	"fmt"
+	"gorm.io/gorm"
 	"net/http"
 	"socialgram/lib"
 	"strings"
@@ -36,15 +38,34 @@ func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	post, err := db.GetPost(postId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			fmt.Println(" GetPost - LikePostHandler error:", err)
+			lib.HttpError404(w, "post not found ")
+			return
+		}
+		fmt.Println("GetPost - LikePostHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+
 	err = db.DeletePost(postId,user.ID)
 	fmt.Println(err)
 	if err != nil {
-		if strings.Contains(err.Error(), "not found") {
+		if strings.Contains(err.Error(), "access") {
 			fmt.Println(" DeletePost - DeletePostHandler error:", err)
 			lib.HttpError404(w, err.Error())
 			return
 		}
 		fmt.Println("DeletePost - DeletePostHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+
+	removeErr := lib.RemoveImage(post.ImageURL)
+	if removeErr != nil {
+		fmt.Println("remove image- DeletePostHandler- SignUpHandler - ", err)
 		lib.HttpError500(w)
 		return
 	}
