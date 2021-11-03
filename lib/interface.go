@@ -12,4 +12,5 @@ type SocialGramStore interface {
 	GetLikeStatus(postId, userId uint) (bool,error)
 	ToggleLike(status bool,postId uint,user *models.User) (bool, error)
 	IsFriend(userId *models.User,friendId uint) (bool,error)
+	GetFriends(user *models.User) ([]models.User,error)
 }

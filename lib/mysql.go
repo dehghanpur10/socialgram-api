@@ -49,8 +49,6 @@ func (mySQL *MySQLDatabase) DeletePost(postId, userId uint) error {
 	return nil
 }
 
-
-
 func (mySQL *MySQLDatabase) GetLikeStatus(postId, userId uint) (bool, error) {
 	var user models.User
 	var post models.Post
@@ -80,11 +78,19 @@ func (mySQL *MySQLDatabase) ToggleLike(status bool, postId uint, user *models.Us
 	return !status, nil
 }
 
-func(mySQL *MySQLDatabase) IsFriend(user *models.User, friendId uint) (bool, error) {
+func (mySQL *MySQLDatabase) IsFriend(user *models.User, friendId uint) (bool, error) {
 	var friend models.User
 	err := mySQL.DB.Model(user).Where("friend_id = ?", friendId).Association("Friends").Find(&friend)
 	if err != nil {
 		return false, err
 	}
 	return friend.ID == friendId, nil
+}
+func (mySQL *MySQLDatabase) GetFriends(user *models.User) ([]models.User, error){
+	var friends []models.User
+	err := mySQL.DB.Model(user).Association("Friends").Find(&friends)
+	if err != nil {
+		return nil, err
+	}
+	return friends, nil
 }
