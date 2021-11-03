@@ -49,16 +49,7 @@ func (mySQL *MySQLDatabase) DeletePost(postId, userId uint) error {
 	return nil
 }
 
-func (mySQL *MySQLDatabase) HasAccessToPost(postId, userId uint) (bool, error) {
-	var user models.User
-	var post models.Post
-	post.ID = postId
-	err := mySQL.DB.Model(&post).Where("user_id = ?", userId).Association("Likes").Find(&user)
-	if err != nil {
-		return false, err
-	}
-	return user.ID == userId, nil
-}
+
 
 func (mySQL *MySQLDatabase) GetLikeStatus(postId, userId uint) (bool, error) {
 	var user models.User
