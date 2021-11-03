@@ -6,7 +6,7 @@ type User struct {
 	gorm.Model
 	Username  string  `gorm:"index;unique;not null" validate:"required" json:"username"`
 	Name      string  `gorm:"not null" validate:"required" json:"name"`
-	Email     string  `gorm:"unique;not null" validate:"required" json:"email"`
+	Email     string  `gorm:"unique;not null" validate:"required,email" json:"email"`
 	Password  string  `gorm:"not null"  json:"password,omitempty"`
 	Gender    string  `gorm:"not null" validate:"required" json:"gender"`
 	Age       uint    `gorm:"not null" validate:"required" json:"age"`

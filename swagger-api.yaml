@@ -663,9 +663,18 @@ components:
         - "content"
         - "image_url"
       properties:
-        "id":
+        "ID":
           type: number
           example: 1
+        "CreatedAt":
+          type: string
+          example: "2021-10-31T18:59:46.289+03:30"
+        "UpdatedAt":
+          type: string
+          example: "2021-10-31T18:59:46.289+03:30"
+        "DeletedAt":
+          type: string
+          example: null
         "user_id":
           type: number
           example: 1
@@ -686,9 +695,18 @@ components:
               allOf:
                 - type: object
                   properties:
-                    "id":
+                    "ID":
                       type: number
                       example: 1
+                    "CreatedAt":
+                      type: string
+                      example: "2021-10-31T18:59:46.289+03:30"
+                    "UpdatedAt":
+                      type: string
+                      example: "2021-10-31T18:59:46.289+03:30"
+                    "DeletedAt":
+                      type: string
+                      example: null
                     "image_url":
                       type: string
                       example: /img/1.png
