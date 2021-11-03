@@ -26,3 +26,6 @@ func (mySQL *MySQLDatabase) SearchUsers(userInfo string, pageNumber int) ([]mode
 	result := mySQL.DB.Offset(pageNumber * PAGE_SIZE).Limit(PAGE_SIZE).Where("username LIKE ? OR name LIKE ?", userInfo, userInfo).Find(&users)
 	return users, result.Error
 }
+func (mySQL *MySQLDatabase) CreateNewPost(post *models.Post) error {
+	return mySQL.DB.Model(&models.Post{}).Create(post).Error
+}

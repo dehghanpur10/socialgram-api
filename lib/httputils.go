@@ -62,3 +62,10 @@ func GetPageNumberFromQuery(r *http.Request) (int, error) {
 	return parseInt, nil
 }
 
+func ParsPostInputFrom(r *http.Request) (*models.Post, error) {
+	postInput := new(models.Post)
+	postInput.Title = r.FormValue("title")
+	postInput.Content = r.FormValue("content")
+	_, _, err := r.FormFile("image")
+	return postInput, err
+}
