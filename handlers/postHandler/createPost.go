@@ -68,11 +68,11 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		removeErr := lib.RemoveImage(postInput.ImageURL)
 		if removeErr != nil {
-			fmt.Println("remove image- CreateNewUser- CreatePostHandler - ", err)
+			fmt.Println("remove image- CreateNewPost- CreatePostHandler - ", err)
 			lib.HttpError500(w)
 			return
 		}
-		fmt.Println(" CreateNewUser- CreatePostHandler - ", err)
+		fmt.Println(" CreateNewPost- CreatePostHandler - ", err)
 		lib.HttpError500(w)
 		return
 	}

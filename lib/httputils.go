@@ -62,6 +62,19 @@ func GetPageNumberFromQuery(r *http.Request) (int, error) {
 	return parseInt, nil
 }
 
+func GetPostIdFromQuery(r *http.Request) (uint, error) {
+	values, exists := r.URL.Query()["post_id"]
+	if !exists || len(values) == 0 || len(values[0]) == 0 {
+		return 0, errors.New("post_id not found in query")
+	}
+	parseInt, err := strconv.ParseUint(values[0],10,32)
+	if err != nil {
+		return 0, errors.New("invalid post_id in query. Must be a number")
+	}
+
+	return uint(parseInt), nil
+}
+
 func ParsPostInputFrom(r *http.Request) (*models.Post, error) {
 	postInput := new(models.Post)
 	postInput.Title = r.FormValue("title")

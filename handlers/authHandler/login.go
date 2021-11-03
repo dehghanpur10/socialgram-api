@@ -1,12 +1,13 @@
 package authHandler
 
 import (
+	"errors"
 	"fmt"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
 	"socialgram/lib"
 	"socialgram/models"
-	"strings"
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +47,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := db.GetUser(userInput.Username)
 	if err != nil {
-		if strings.Contains(err.Error(), "record not found") {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			fmt.Println(" GetUser - LoginHandler error:", err)
 			lib.HttpError404(w, "not found username")
 			return
