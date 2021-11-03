@@ -16,6 +16,6 @@ type User struct {
 	Bio       string  `json:"bio"`
 	Interest  string  `json:"interest"`
 	Posts     []*Post `json:"posts,omitempty"`
-	Requests  []*User `gorm:"many2many:User_Request;" json:"requests,omitempty"`
-	Friends   []*User `gorm:"many2many:User_Friend;" json:"friends,omitempty"`
+	Requests  []*User `gorm:"many2many:User_Request;constraint:OnUpdate:CASCADE;" json:"requests,omitempty"`
+	Friends   []*User `gorm:"many2many:User_Friend;constraint:OnUpdate:CASCADE;" json:"friends,omitempty"`
 }
