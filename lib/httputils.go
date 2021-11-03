@@ -82,3 +82,16 @@ func ParsPostInputFrom(r *http.Request) (*models.Post, error) {
 	_, _, err := r.FormFile("image")
 	return postInput, err
 }
+
+func GetUserIdFromQuery(r *http.Request) (uint, error) {
+	values, exists := r.URL.Query()["user_id"]
+	if !exists || len(values) == 0 || len(values[0]) == 0 {
+		return 0, errors.New("user_id not found in query")
+	}
+	parseInt, err := strconv.ParseUint(values[0],10,32)
+	if err != nil {
+		return 0, errors.New("invalid user_id in query. Must be a number")
+	}
+
+	return uint(parseInt), nil
+}

@@ -55,7 +55,7 @@ func LikePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	isFriend, err := db.IsFriend(user, post.UserID)
 	if err != nil {
-		fmt.Println("GetLikeStatus - LikePostHandler error:", err)
+		fmt.Println("IsFriend - LikePostHandler error:", err)
 		lib.HttpError500(w)
 		return
 	}
