@@ -86,6 +86,7 @@ func (mySQL *MySQLDatabase) IsFriend(user *models.User, friendId uint) (bool, er
 	}
 	return friend.ID == friendId, nil
 }
+
 func (mySQL *MySQLDatabase) GetFriends(user *models.User) ([]models.User, error){
 	var friends []models.User
 	err := mySQL.DB.Model(user).Association("Friends").Find(&friends)
@@ -94,3 +95,14 @@ func (mySQL *MySQLDatabase) GetFriends(user *models.User) ([]models.User, error)
 	}
 	return friends, nil
 }
+
+func (mySQL *MySQLDatabase) DeleteFriend(user *models.User, friendId  uint) error{
+	var friend models.User
+	friend.ID = friendId
+	err := mySQL.DB.Model(&user).Association("Friends").Delete(&friend)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
