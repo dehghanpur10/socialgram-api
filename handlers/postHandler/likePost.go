@@ -13,10 +13,6 @@ func LikePostHandler(w http.ResponseWriter, r *http.Request) {
 		lib.HttpOptionsResponseHeaders(w)
 		return
 	}
-	if r.Method == http.MethodOptions {
-		lib.HttpOptionsResponseHeaders(w)
-		return
-	}
 
 	lib.InitLog(r)
 
