@@ -9,5 +9,5 @@ type Post struct {
 	Title    string  `gorm:"not null" validate:"required" json:"title"`
 	Content  string  `gorm:"not null" validate:"required" json:"content"`
 	ImageURL string  `gorm:"not null" json:"image_url"`
-	Likes    []*User `gorm:"many2many:Post_Like;" json:"likes,omitempty"`
+	Likes    []*User `gorm:"many2many:Post_Like;constraint:OnUpdate:CASCADE" json:"likes,omitempty"`
 }

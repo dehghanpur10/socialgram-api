@@ -335,8 +335,16 @@ paths:
             type: number
           required: true
       responses:
-        204:
-          description: "No Content"
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
 
         default:
           description: "Error"
