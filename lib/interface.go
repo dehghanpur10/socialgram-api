@@ -14,4 +14,5 @@ type SocialGramStore interface {
 	IsFriend(userId *models.User,friendId uint) (bool,error)
 	GetFriends(user *models.User) ([]models.User,error)
 	DeleteFriend(user *models.User, friendId  uint) error
+	GetFriendsPosts(user *models.User, pageNumber int) ([]models.Post, error)
 }

@@ -24,7 +24,7 @@ func Init() *mux.Router {
 
 	r.HandleFunc("/profile", appHandler.EditProfileHandler).Methods(http.MethodPut, http.MethodOptions)
 
-	r.HandleFunc("/dashboard/{page}", appHandler.GetDashboardHandler).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/dashboard", appHandler.GetDashboardHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	r.HandleFunc("/post", postHandler.CreatePostHandler).Methods(http.MethodPost, http.MethodOptions)
 

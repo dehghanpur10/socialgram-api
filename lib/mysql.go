@@ -106,3 +106,13 @@ func (mySQL *MySQLDatabase) DeleteFriend(user *models.User, friendId  uint) erro
 	return nil
 }
 
+func (mySQL *MySQLDatabase)GetFriendsPosts(user *models.User, pageNumber int) ([]models.Post, error){
+	var post []models.Post
+	friends,err := mySQL.GetFriends(user)
+	if err != nil {
+		return nil, err
+	}
+	result:=mySQL.DB.Model(&models.Post{}).Order("id desc").Offset(pageNumber*PAGE_SIZE).Limit(PAGE_SIZE).Where("user_id IN ?", models.ConvertToStringUsers(friends)).Preload("User").Find(&post)
+	return post, result.Error
+}
+

@@ -18,3 +18,11 @@ func RemovePasswordOfUsers(users []User)  {
 		users[i].Password = ""
 	}
 }
+
+func ConvertToStringUsers(user  []User)[]uint{
+	stringUser := []uint{}
+	for _, user := range user {
+		stringUser = append(stringUser,user.ID)
+	}
+	return stringUser
+}
