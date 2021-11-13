@@ -17,7 +17,7 @@ func InitLog(r *http.Request) {
 func HttpOptionsResponseHeaders(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	w.Header().Set("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type")
+	w.Header().Set("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, DELETE, PUT, PATCH, GET, OPTIONS")
 }
 
