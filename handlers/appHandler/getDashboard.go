@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"socialgram/lib"
+	"socialgram/models"
 )
 
 func GetDashboardHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,6 +43,7 @@ func GetDashboardHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	models.RemovePasswordFromPosts(posts)
 
 	jsonBytes, err := lib.ConvertToJsonBytes(posts)
 	if err != nil {

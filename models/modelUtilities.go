@@ -26,3 +26,9 @@ func ConvertToStringUsers(user  []User)[]uint{
 	}
 	return stringUser
 }
+
+func RemovePasswordFromPosts(posts []Post) {
+	for i := 0; i < len(posts); i++ {
+		posts[i].User.Password = ""
+	}
+}

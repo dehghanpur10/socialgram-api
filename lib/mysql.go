@@ -19,7 +19,6 @@ func (mySQL *MySQLDatabase) CreateNewUser(user *models.User) error {
 func (mySQL *MySQLDatabase) GetUser(userInfo string) (*models.User, error) {
 	user := new(models.User)
 	result := mySQL.DB.Where("username = ? OR email = ?", userInfo, userInfo).First(&user)
-	fmt.Println(result.RowsAffected)
 	return user, result.Error
 }
 
@@ -116,3 +115,8 @@ func (mySQL *MySQLDatabase)GetFriendsPosts(user *models.User, pageNumber int) ([
 	return post, result.Error
 }
 
+func (mysql *MySQLDatabase)GetProfileWithUserId(userId uint) (*models.User, error){
+	user := new(models.User)
+	result := mysql.DB.Preload("Posts").First(&user,userId)
+	return user, result.Error
+}
