@@ -9,7 +9,7 @@ type User struct {
 	Email     string  `gorm:"unique;not null" validate:"required,email" json:"email"`
 	Password  string  `gorm:"not null"  json:"password,omitempty"`
 	Gender    string  `gorm:"not null" validate:"required" json:"gender"`
-	Age       uint    `gorm:"not null" validate:"required" json:"age"`
+	Age       uint    `gorm:"not null" validate:"required" json:"age,omitempty"`
 	City      string  `gorm:"not null" validate:"required" json:"city"`
 	Country   string  `gorm:"not null" validate:"required" json:"country"`
 	AvatarURL string  `gorm:"not null" json:"image_url,omitempty"`

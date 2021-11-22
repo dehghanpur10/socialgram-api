@@ -120,3 +120,8 @@ func (mysql *MySQLDatabase)GetProfileWithUserId(userId uint) (*models.User, erro
 	result := mysql.DB.Preload("Posts").First(&user,userId)
 	return user, result.Error
 }
+
+func (mysql *MySQLDatabase)EditProfile(user *models.User, userInput *models.User) (*models.User, error){
+	result := mysql.DB.Model(&user).Updates(models.User{Bio: userInput.Bio, Interest : userInput.Interest})
+		return user, result.Error
+}
