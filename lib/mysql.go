@@ -125,3 +125,15 @@ func (mysql *MySQLDatabase)EditProfile(user *models.User, userInput *models.User
 	result := mysql.DB.Model(&user).Updates(models.User{Bio: userInput.Bio, Interest : userInput.Interest})
 		return user, result.Error
 }
+
+func (mySQL *MySQLDatabase) GetFollowers(user *models.User) ([]models.User, error){
+	var friendsId []uint
+	var friends []models.User
+	query := fmt.Sprintf("SELECT user_id FROM user_friends WHERE friend_id = %v", user.ID)
+	mySQL.DB.Raw(query).Scan(&friendsId)
+	err := mySQL.DB.Find(&friends, friendsId).Error
+	if err != nil {
+		return nil, err
+	}
+	return friends, nil
+}
