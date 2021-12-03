@@ -21,7 +21,11 @@ func (mySQL *MySQLDatabase) GetUser(userInfo string) (*models.User, error) {
 	result := mySQL.DB.Where("username = ? OR email = ?", userInfo, userInfo).First(&user)
 	return user, result.Error
 }
-
+func (mySQL *MySQLDatabase) GetUserById(id uint) (*models.User, error) {
+	user := new(models.User)
+	result := mySQL.DB.First(&user, id)
+	return user, result.Error
+}
 func (mySQL *MySQLDatabase) GetPost(PostId uint) (*models.Post, error) {
 	post := new(models.Post)
 	result := mySQL.DB.First(&post, PostId)
@@ -121,12 +125,12 @@ func (mysql *MySQLDatabase) GetProfileWithUserId(userId uint) (*models.User, err
 	return user, result.Error
 }
 
-func (mysql *MySQLDatabase)EditProfile(user *models.User, userInput *models.User) (*models.User, error){
-	result := mysql.DB.Model(&user).Updates(models.User{Bio: userInput.Bio, Interest : userInput.Interest})
-		return user, result.Error
+func (mysql *MySQLDatabase) EditProfile(user *models.User, userInput *models.User) (*models.User, error) {
+	result := mysql.DB.Model(&user).Updates(models.User{Bio: userInput.Bio, Interest: userInput.Interest})
+	return user, result.Error
 }
 
-func (mySQL *MySQLDatabase) GetFollowers(user *models.User) ([]models.User, error){
+func (mySQL *MySQLDatabase) GetFollowers(user *models.User) ([]models.User, error) {
 	var friendsId []uint
 	var friends []models.User
 	query := fmt.Sprintf("SELECT user_id FROM user_friends WHERE friend_id = %v", user.ID)

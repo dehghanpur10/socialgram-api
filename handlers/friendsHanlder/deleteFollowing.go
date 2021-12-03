@@ -41,8 +41,8 @@ func DeleteFollowingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !isFriend {
-		fmt.Println("is not friend - DeleteFollowingHandler error:", err)
-		lib.HttpError400(w, "this user isn't your friend")
+		fmt.Println("is not friend - DeleteFollowingHandler error:")
+		lib.HttpError400(w, "this user isn't your following")
 		return
 	}
 

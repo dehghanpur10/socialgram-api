@@ -191,7 +191,15 @@ paths:
                       "posts":
                         type: array
                         items:
-                          $ref: "#/components/schemas/Post"
+                          allOf:
+                            - $ref: "#/components/schemas/Post"
+                            - type: object
+                              properties:
+                                "likes":
+                                  type: array
+                                  items:
+                                    $ref:  "#/components/schemas/User"
+
                   - $ref: "#/components/schemas/User"
 
         default:
@@ -269,8 +277,14 @@ paths:
                   "posts":
                     type: array
                     items:
-                      $ref: "#/components/schemas/CompletePost"
-
+                      allOf:
+                        - $ref: "#/components/schemas/Post"
+                        - type: object
+                          properties:
+                            "likes":
+                              type: array
+                              items:
+                                $ref:  "#/components/schemas/User"
         default:
           description: "Error"
           content:
@@ -703,6 +717,7 @@ components:
         "imgae_url":
           type: string
           example: /img/1.png
+
     CompletePost:
       allOf:
         - type: object
