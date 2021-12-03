@@ -141,3 +141,7 @@ func (mySQL *MySQLDatabase) GetFollowers(user *models.User) ([]models.User, erro
 	}
 	return friends, nil
 }
+func (mySQL *MySQLDatabase) CreateRequest(user *models.User, friendId uint) error {
+	query := fmt.Sprintf("INSERT INTO `user_friends` (`user_id`,`friend_id`) VALUES (%v,%v) ON DUPLICATE KEY UPDATE `post_id`=`post_id`", user.ID, friendId)
+	return mySQL.DB.Exec(query).Error
+}

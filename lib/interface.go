@@ -19,4 +19,5 @@ type SocialGramStore interface {
 	GetProfileWithUserId(userId uint) (*models.User, error)
 	EditProfile(user *models.User, userInput *models.User) (*models.User, error)
 	GetFollowers(user *models.User) ([]models.User, error)
+	CreateRequest(user *models.User, friendId uint) error
 }
