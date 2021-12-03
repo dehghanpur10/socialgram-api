@@ -86,7 +86,7 @@ func (mySQL *MySQLDatabase) IsFriend(user *models.User, friendId uint) (bool, er
 	return friend.ID == friendId, nil
 }
 
-func (mySQL *MySQLDatabase) GetFriends(user *models.User) ([]models.User, error){
+func (mySQL *MySQLDatabase) GetFriends(user *models.User) ([]models.User, error) {
 	var friends []models.User
 	err := mySQL.DB.Model(user).Association("Friends").Find(&friends)
 	if err != nil {
@@ -95,7 +95,7 @@ func (mySQL *MySQLDatabase) GetFriends(user *models.User) ([]models.User, error)
 	return friends, nil
 }
 
-func (mySQL *MySQLDatabase) DeleteFriend(user *models.User, friendId  uint) error{
+func (mySQL *MySQLDatabase) DeleteFriend(user *models.User, friendId uint) error {
 	var friend models.User
 	friend.ID = friendId
 	err := mySQL.DB.Model(&user).Association("Friends").Delete(&friend)
@@ -105,18 +105,18 @@ func (mySQL *MySQLDatabase) DeleteFriend(user *models.User, friendId  uint) erro
 	return nil
 }
 
-func (mySQL *MySQLDatabase)GetFriendsPosts(user *models.User, pageNumber int) ([]models.Post, error){
+func (mySQL *MySQLDatabase) GetFriendsPosts(user *models.User, pageNumber int) ([]models.Post, error) {
 	var post []models.Post
-	friends,err := mySQL.GetFriends(user)
+	friends, err := mySQL.GetFriends(user)
 	if err != nil {
 		return nil, err
 	}
-	result:=mySQL.DB.Model(&models.Post{}).Order("id desc").Offset(pageNumber*PAGE_SIZE).Limit(PAGE_SIZE).Where("user_id IN ?", models.ConvertToStringUsers(friends)).Preload("User").Find(&post)
+	result := mySQL.DB.Model(&models.Post{}).Order("id desc").Offset(pageNumber*PAGE_SIZE).Limit(PAGE_SIZE).Where("user_id IN ?", models.ConvertToStringUsers(friends)).Preload("User").Preload("Likes").Find(&post)
 	return post, result.Error
 }
 
-func (mysql *MySQLDatabase)GetProfileWithUserId(userId uint) (*models.User, error){
+func (mysql *MySQLDatabase) GetProfileWithUserId(userId uint) (*models.User, error) {
 	user := new(models.User)
-	result := mysql.DB.Preload("Posts").First(&user,userId)
+	result := mysql.DB.Preload("Posts.Likes").First(&user, userId)
 	return user, result.Error
 }
