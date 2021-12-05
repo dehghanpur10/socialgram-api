@@ -154,3 +154,12 @@ func (mySQL *MySQLDatabase) IsRequest(user *models.User, friendId uint) (bool, e
 	}
 	return friend.ID == friendId, nil
 }
+func (mySQL *MySQLDatabase) DeleteRequest(user *models.User, friendId uint) error {
+	var friend models.User
+	friend.ID = friendId
+	err := mySQL.DB.Model(&user).Association("Requests").Delete(&friend)
+	if err != nil {
+		return err
+	}
+	return nil
+}
