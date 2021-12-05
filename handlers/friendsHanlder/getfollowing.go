@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"socialgram/lib"
+	"socialgram/models"
 )
 
 func GetFollowingHandler(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +35,7 @@ func GetFollowingHandler(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError500(w)
 		return
 	}
-
+	models.RemovePasswordOfUsers(friends)
 	jsonBytes, err := lib.ConvertToJsonBytes(friends)
 	if err != nil {
 		fmt.Println("json.Marshal - GetFollowingHandler error:", err)

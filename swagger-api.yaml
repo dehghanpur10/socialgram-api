@@ -220,18 +220,16 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              allOf:
-                - type: object
-                  properties:
-                    "avatar":
-                      type: string
-                      format: binary
-                    "password":
-                      type: string
-                      example: "adfa##@%fdfd5"
-                - $ref: "#/components/schemas/User"
+              type: object
+              properties:
+                "bio":
+                  type: string
+                  example: bio
+                "interest":
+                  type: string
+                  example: "sport, music"
       responses:
         200:
           description: "Success"
