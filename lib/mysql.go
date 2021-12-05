@@ -135,6 +135,9 @@ func (mySQL *MySQLDatabase) GetFollowers(user *models.User) ([]models.User, erro
 	var friends []models.User
 	query := fmt.Sprintf("SELECT user_id FROM user_friends WHERE friend_id = %v", user.ID)
 	mySQL.DB.Raw(query).Scan(&friendsId)
+	if len(friendsId) == 0 {
+		return []models.User{}, nil
+	}
 	err := mySQL.DB.Find(&friends, friendsId).Error
 	if err != nil {
 		return nil, err
@@ -162,4 +165,18 @@ func (mySQL *MySQLDatabase) DeleteRequest(user *models.User, friendId uint) erro
 		return err
 	}
 	return nil
+}
+func (mySQL *MySQLDatabase) GetRequests(user *models.User) ([]models.User, error) {
+	var friendsId []uint
+	var friends []models.User
+	query := fmt.Sprintf("SELECT user_id FROM user_requests WHERE request_id = %v", user.ID)
+	mySQL.DB.Raw(query).Scan(&friendsId)
+	if len(friendsId) == 0 {
+		return []models.User{}, nil
+	}
+	err := mySQL.DB.Find(&friends, friendsId).Error
+	if err != nil {
+		return nil, err
+	}
+	return friends, nil
 }
