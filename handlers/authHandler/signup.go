@@ -3,6 +3,7 @@ package authHandler
 import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"io/ioutil"
 	"net/http"
 	"socialgram/lib"
 	"strings"
@@ -23,7 +24,14 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userInput, err := lib.ParsUserInputFrom(r)
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("ioutil.ReadAll  - SignUpHandler error:", err)
+		lib.HttpError400(w, "invalid request structure")
+		return
+	}
+
+	userInput, err := lib.ParseUserInputFrom(reqBody)
 	if err != nil {
 		fmt.Println("parseUserInput - SignUpHandler error:", err)
 		lib.HttpError400(w, "page should be number or image field not found")
@@ -51,31 +59,31 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userInput.AvatarURL, err = lib.SaveImageInStaticDirectory(r)
-	if err != nil {
-		if strings.Contains(err.Error(), "type") {
-			fmt.Println(" saveImage - SignUpHandler error: ", err)
-			lib.HttpError400(w, "image type is incorrect")
-			return
-		}
-		if strings.Contains(err.Error(), "size") {
-			fmt.Println(" saveImage - SignUpHandler error: ", err)
-			lib.HttpError400(w, "image size is incorrect")
-			return
-		}
-		fmt.Println("SaveImage - SignUpHandler - ", err)
-		lib.HttpError500(w)
-		return
-	}
+	//userInput.AvatarURL, err = lib.SaveImageInStaticDirectory(r)
+	//if err != nil {
+	//	if strings.Contains(err.Error(), "type") {
+	//		fmt.Println(" saveImage - SignUpHandler error: ", err)
+	//		lib.HttpError400(w, "image type is incorrect")
+	//		return
+	//	}
+	//	if strings.Contains(err.Error(), "size") {
+	//		fmt.Println(" saveImage - SignUpHandler error: ", err)
+	//		lib.HttpError400(w, "image size is incorrect")
+	//		return
+	//	}
+	//	fmt.Println("SaveImage - SignUpHandler - ", err)
+	//	lib.HttpError500(w)
+	//	return
+	//}
 
 	err = db.CreateNewUser(userInput)
 	if err != nil {
-		removeErr := lib.RemoveImage(userInput.AvatarURL)
-		if removeErr != nil {
-			fmt.Println("remove image- CreateNewUser- SignUpHandler - ", err)
-			lib.HttpError500(w)
-			return
-		}
+		//removeErr := lib.RemoveImage(userInput.AvatarURL)
+		//if removeErr != nil {
+		//	fmt.Println("remove image- CreateNewUser- SignUpHandler - ", err)
+		//	lib.HttpError500(w)
+		//	return
+		//}
 		if strings.Contains(err.Error(), "Duplicate") {
 			fmt.Println(" Duplicate - SignUpHandler error: ", err)
 			lib.HttpError400(w, "username or email should be unique")

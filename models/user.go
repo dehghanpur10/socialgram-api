@@ -12,7 +12,7 @@ type User struct {
 	Age       uint    `gorm:"not null" validate:"required" json:"age,omitempty"`
 	City      string  `gorm:"not null" validate:"required" json:"city"`
 	Country   string  `gorm:"not null" validate:"required" json:"country"`
-	AvatarURL string  `gorm:"not null" json:"image_url,omitempty"`
+	AvatarURL string  `gorm:"not null" validate:"required" json:"image_url"`
 	Bio       string  `json:"bio"`
 	Interest  string  `json:"interest"`
 	Posts     []*Post `json:"posts,omitempty"`

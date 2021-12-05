@@ -32,7 +32,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userInput, err := lib.ParseLoginUserInputFrom(reqBody)
+	userInput, err := lib.ParseUserInputFrom(reqBody)
 	if err != nil {
 		fmt.Println("parseUserInput - LoginHandler error:", err)
 		lib.HttpError400(w, "invalid user input")

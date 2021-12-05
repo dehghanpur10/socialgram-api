@@ -3,9 +3,9 @@ package postHandler
 import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"io/ioutil"
 	"net/http"
 	"socialgram/lib"
-	"strings"
 )
 
 func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,8 +29,14 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError401(w, err.Error())
 		return
 	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("ioutil.ReadAll  - SignUpHandler error:", err)
+		lib.HttpError400(w, "invalid request structure")
+		return
+	}
 
-	postInput, err := lib.ParsPostInputFrom(r)
+	postInput, err := lib.ParsPostInputFrom(reqBody)
 	if err != nil {
 		fmt.Println("parsePostInput - CreatePostHandler error:", err)
 		lib.HttpError400(w, "image field not found")
@@ -47,31 +53,8 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	postInput.UserID = user.ID
 
-	postInput.ImageURL, err = lib.SaveImageInStaticDirectory(r)
-	if err != nil {
-		if strings.Contains(err.Error(), "type") {
-			fmt.Println(" saveImage - CreatePostHandler error: ", err)
-			lib.HttpError400(w, "image type is incorrect")
-			return
-		}
-		if strings.Contains(err.Error(), "size") {
-			fmt.Println(" saveImage - CreatePostHandler error: ", err)
-			lib.HttpError400(w, "image size is incorrect")
-			return
-		}
-		fmt.Println("SaveImage - CreatePostHandler - ", err)
-		lib.HttpError500(w)
-		return
-	}
-
 	err = db.CreateNewPost(postInput)
 	if err != nil {
-		removeErr := lib.RemoveImage(postInput.ImageURL)
-		if removeErr != nil {
-			fmt.Println("remove image- CreateNewPost- CreatePostHandler - ", err)
-			lib.HttpError500(w)
-			return
-		}
 		fmt.Println(" CreateNewPost- CreatePostHandler - ", err)
 		lib.HttpError500(w)
 		return

@@ -15,7 +15,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               allOf:
                 - type: object
@@ -23,9 +23,9 @@ paths:
                     - "avatar"
                     - "password"
                   properties:
-                    "image":
+                    "image_url":
                       type: string
-                      format: binary
+                      example: "http://test.com/img.png"
                     "password":
                       type: string
                       example: "adfa##@%fdfd5"
@@ -309,7 +309,7 @@ paths:
                 - "user_id"
                 - "title"
                 - "content"
-                - "image"
+                - "image_url"
               properties:
                 "title":
                   type: string
@@ -319,7 +319,7 @@ paths:
                   example: "this is a new post."
                 "image":
                   type: string
-                  format: binary
+                  example: "https://test.com/img.png"
 
       responses:
         201:
@@ -743,5 +743,3 @@ components:
                       example: /img/1.png
                 - $ref: "#/components/schemas/User"
         - $ref: "#/components/schemas/Post"
-
-
