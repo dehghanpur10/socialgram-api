@@ -1,9 +1,12 @@
 package appHandler
 
 import (
+	"errors"
 	"fmt"
+	"gorm.io/gorm"
 	"net/http"
 	"socialgram/lib"
+	"socialgram/models"
 )
 
 func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +17,6 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 	lib.InitLog(r)
 
-
 	db, err := lib.GetDatabase()
 	if err != nil {
 		fmt.Println("GetDatabase - GetProfileHandler error:", err)
@@ -22,14 +24,12 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	user, err := lib.GetBearerUser(db, r.Header)
 	if err != nil {
 		fmt.Println("GetBearerUser - GetProfileHandler error:", err)
 		lib.HttpError401(w, err.Error())
 		return
 	}
-
 
 	userIdProfile, err := lib.GetUserIdFromQuery(r)
 	if err != nil {
@@ -41,29 +41,39 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 		userIdProfile = user.ID
 	}
 
+	resultUser, err := db.GetProfileWithUserId(userIdProfile)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			fmt.Println(" GetProfileWithUserId - GetProfileHandler error:", err)
+			lib.HttpError404(w, "user not found ")
+			return
+		}
+		fmt.Println("GetFriendsPosts - GetProfileHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+
+	resultUser.Password = ""
+	isRequest, err := db.IsRequest(user, userIdProfile)
+	if err != nil {
+		fmt.Println("IsRequest - GetProfileHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+	if isRequest {
+		resultUser.Request = true
+	} else {
+		resultUser.Request = false
+	}
 	isFriend, err := db.IsFriend(user, userIdProfile)
 	if err != nil {
 		fmt.Println("IsFriend - GetProfileHandler error:", err)
 		lib.HttpError500(w)
 		return
 	}
-
-	if !isFriend&&(userIdProfile!=user.ID){
-		fmt.Println("this user is not friend - GetProfileHandler error:", err)
-		lib.HttpError400(w, "this user is not friend")
-		return
+	if !isFriend && (userIdProfile != user.ID) {
+		resultUser.Posts = []*models.Post{}
 	}
-
-
-	resultUser, err := db.GetProfileWithUserId(userIdProfile)
-	if err != nil {
-		fmt.Println("GetFriendsPosts - GetDashboardHandler error:", err)
-		lib.HttpError500(w)
-		return
-	}
-
-	resultUser.Password = ""
-
 	jsonBytes, err := lib.ConvertToJsonBytes(resultUser)
 	if err != nil {
 		fmt.Println("json.Marshal - GetDashboardHandler error:", err)
@@ -74,5 +84,3 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	lib.HttpSuccessResponse(w, http.StatusOK, jsonBytes)
 
 }
-
-

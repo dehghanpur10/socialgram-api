@@ -15,6 +15,7 @@ type User struct {
 	AvatarURL string  `gorm:"not null" validate:"required" json:"image_url"`
 	Bio       string  `json:"bio"`
 	Interest  string  `json:"interest"`
+	Request   bool    `json:"requested"`
 	Posts     []*Post `json:"posts,omitempty"`
 	Requests  []*User `gorm:"many2many:User_Request;constraint:OnUpdate:CASCADE;" json:"requests,omitempty"`
 	Friends   []*User `gorm:"many2many:User_Friend;constraint:OnUpdate:CASCADE;" json:"friends,omitempty"`
