@@ -23,4 +23,5 @@ type SocialGramStore interface {
 	IsRequest(user *models.User, friendId uint) (bool, error)
 	DeleteRequest(user *models.User, friendId uint) error
 	GetRequests(user *models.User) ([]models.User, error)
+	CreateFriend(user *models.User, friendId uint) error
 }

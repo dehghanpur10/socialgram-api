@@ -93,3 +93,14 @@ func GetUserIdFromQuery(r *http.Request) (uint, error) {
 
 	return uint(parseInt), nil
 }
+func GetStatusFromQuery(r *http.Request) (string, error) {
+	values, exists := r.URL.Query()["status"]
+	if !exists || len(values) == 0 || len(values[0]) == 0 {
+		return "", errors.New("status not found in query")
+	}
+
+	if values[0] == "ACCEPT" || values[0] == "DECLINE" {
+		return values[0], nil
+	}
+	return "", errors.New("invalid status")
+}
