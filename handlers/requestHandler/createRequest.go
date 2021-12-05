@@ -1,7 +1,9 @@
 package requestHandler
 
 import (
+	"errors"
 	"fmt"
+	"gorm.io/gorm"
 	"net/http"
 	"socialgram/lib"
 )
@@ -33,7 +35,28 @@ func CreateRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError400(w, err.Error())
 		return
 	}
-
+	_, err = db.GetUserById(friendId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			fmt.Println(" GetUserById - CreateRequestHandler error:", err)
+			lib.HttpError404(w, "user not found ")
+			return
+		}
+		fmt.Println("GetUserById - CreateRequestHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+	isRequest, err := db.IsRequest(user, friendId)
+	if err != nil {
+		fmt.Println("IsRequest - CreateRequestHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+	if isRequest {
+		fmt.Println("request already exist - CreateRequestHandler")
+		lib.HttpError400(w, "request already exist")
+		return
+	}
 	err = db.CreateRequest(user, friendId)
 	if err != nil {
 		fmt.Println("CreateRequest - CreateRequestHandler error:", err)
