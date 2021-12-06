@@ -34,7 +34,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	userInput, err := lib.ParseUserInputFrom(reqBody)
 	if err != nil {
 		fmt.Println("parseUserInput - SignUpHandler error:", err)
-		lib.HttpError400(w, "age should be number")
+		lib.HttpError400(w, "invalid input structure")
 		return
 	}
 
