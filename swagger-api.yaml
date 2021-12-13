@@ -507,6 +507,12 @@ paths:
       summary: fetch all followers for current user
       security:
         - bearerAuth: []   # Use OAuth with a different scope
+      parameters:
+        - in: query
+          name: useId
+          description: user's id that you want fetch it if was empty return profile current user
+          schema:
+            type: number
       responses:
         200:
           description: "success"
