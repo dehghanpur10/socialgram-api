@@ -74,6 +74,9 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	if !isFriend && (userIdProfile != user.ID) {
 		resultUser.Posts = []*models.Post{}
 	}
+	if isFriend {
+		resultUser.IsFriend = true
+	}
 	jsonBytes, err := lib.ConvertToJsonBytes(resultUser)
 	if err != nil {
 		fmt.Println("json.Marshal - GetDashboardHandler error:", err)
