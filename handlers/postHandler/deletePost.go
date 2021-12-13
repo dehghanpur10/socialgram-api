@@ -38,7 +38,7 @@ func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post, err := db.GetPost(postId)
+	_, err = db.GetPost(postId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			fmt.Println(" GetPost - LikePostHandler error:", err)
@@ -59,13 +59,6 @@ func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		fmt.Println("DeletePost - DeletePostHandler error:", err)
-		lib.HttpError500(w)
-		return
-	}
-
-	removeErr := lib.RemoveImage(post.ImageURL)
-	if removeErr != nil {
-		fmt.Println("remove image- DeletePostHandler- SignUpHandler - ", err)
 		lib.HttpError500(w)
 		return
 	}
