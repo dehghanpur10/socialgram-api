@@ -35,6 +35,19 @@ func CreateRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError400(w, err.Error())
 		return
 	}
+
+	isFriend, err := db.IsFriend(user, friendId)
+	if err != nil {
+		fmt.Println("IsFriend - CreateRequestHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+	if isFriend && (friendId == user.ID ){
+		fmt.Println("IsFriend - CreateRequestHandler error:", err)
+		lib.HttpError400(w, "you can not send request")
+		return
+	}
+
 	_, err = db.GetUserById(friendId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

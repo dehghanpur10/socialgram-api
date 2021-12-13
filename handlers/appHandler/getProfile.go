@@ -74,9 +74,29 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	if !isFriend && (userIdProfile != user.ID) {
 		resultUser.Posts = []*models.Post{}
 	}
+	if isFriend {
+		resultUser.IsFriend = true
+	}
+	resultUsers, err := db.GetFollowers(user)
+	if err != nil {
+		fmt.Println("EditProfile - GetProfileHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+
+	friends, err := db.GetFriends(user)
+	if err != nil {
+		fmt.Println("GetFriends - GetProfileHandler error:", err)
+		lib.HttpError500(w)
+		return
+	}
+
+	resultUser.FollowingNumber = len(friends)
+	resultUser.FollowerNumber = len(resultUsers)
+
 	jsonBytes, err := lib.ConvertToJsonBytes(resultUser)
 	if err != nil {
-		fmt.Println("json.Marshal - GetDashboardHandler error:", err)
+		fmt.Println("json.Marshal - GetProfileHandler error:", err)
 		lib.HttpError500(w)
 		return
 	}
