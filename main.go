@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Println("server run ...")
+	fmt.Println("server run ....")
 	router := routes.Init()
 	err := http.ListenAndServe(lib.SERVER_PORT, router)
 	if err != nil {
