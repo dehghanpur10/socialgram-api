@@ -77,14 +77,14 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	if isFriend {
 		resultUser.IsFriend = true
 	}
-	resultUsers, err := db.GetFollowers(user)
+	resultUsers, err := db.GetFollowers(resultUser)
 	if err != nil {
 		fmt.Println("EditProfile - GetProfileHandler error:", err)
 		lib.HttpError500(w)
 		return
 	}
 
-	friends, err := db.GetFriends(user)
+	friends, err := db.GetFriends(resultUser)
 	if err != nil {
 		fmt.Println("GetFriends - GetProfileHandler error:", err)
 		lib.HttpError500(w)
