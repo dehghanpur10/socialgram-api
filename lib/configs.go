@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	SERVER_PORT = os.Getenv("SERVER_PORT")
+	SERVER_PORT = os.Getenv("PORT")
 	DB_USER = os.Getenv("DB_USER")
 	DB_PASSWORD = os.Getenv("DB_PASSWORD")
 	DB_HOST = os.Getenv("DB_HOST")
