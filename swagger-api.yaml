@@ -4,7 +4,7 @@ info:
   title: internet Engineering project API
   description: This is a simple API for internet Engineering project API
 servers:
-  - url: https://
+  - url: https://socialgram-server.herokuapp.com/
 paths:
   /signup:
     post:
