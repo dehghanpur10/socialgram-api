@@ -42,7 +42,7 @@ func CreateRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError500(w)
 		return
 	}
-	if isFriend && (friendId == user.ID ){
+	if isFriend || (friendId == user.ID) {
 		fmt.Println("IsFriend - CreateRequestHandler error:", err)
 		lib.HttpError400(w, "you can not send request")
 		return
