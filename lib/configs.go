@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 )
@@ -20,7 +19,7 @@ var (
 
 func init() {
 	SERVER_PORT = os.Getenv("PORT")
-	fmt.Println(SERVER_PORT)
+	SERVER_PORT = ":" + SERVER_PORT
 	DB_USER = os.Getenv("DB_USER")
 	DB_PASSWORD = os.Getenv("DB_PASSWORD")
 	DB_HOST = os.Getenv("DB_HOST")
