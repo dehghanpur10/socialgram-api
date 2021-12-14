@@ -71,7 +71,7 @@ func (mySQL *MySQLDatabase) ToggleLike(status bool, postId uint, user *models.Us
 		err = mySQL.DB.Model(&post).Association("Likes").Delete(user)
 	} else {
 		//err = mySQL.DB.Model(&post).Association("Likes").Append(user)
-		query := fmt.Sprintf("INSERT INTO post_likes (post_id,user_id) VALUES (%v,%v) ON DUPLICATE KEY UPDATE post_id=post_id", postId, user.ID)
+		query := fmt.Sprintf("INSERT INTO post_likes (post_id,user_id) VALUES (%v,%v);", postId, user.ID)
 		err = mySQL.DB.Exec(query).Error
 	}
 
@@ -148,7 +148,7 @@ func (mySQL *MySQLDatabase) GetFollowers(user *models.User) ([]models.User, erro
 	return friends, nil
 }
 func (mySQL *MySQLDatabase) CreateRequest(user *models.User, friendId uint) error {
-	query := fmt.Sprintf("INSERT INTO user_requests (user_id,request_id) VALUES (%v,%v) ON DUPLICATE KEY UPDATE user_id=user_id", user.ID, friendId)
+	query := fmt.Sprintf("INSERT INTO user_requests (user_id,request_id) VALUES (%v,%v);", user.ID, friendId)
 	return mySQL.DB.Exec(query).Error
 }
 
@@ -184,6 +184,6 @@ func (mySQL *MySQLDatabase) GetRequests(user *models.User) ([]models.User, error
 	return friends, nil
 }
 func (mySQL *MySQLDatabase) CreateFriend(user *models.User, friendId uint) error {
-	query := fmt.Sprintf("INSERT INTO user_friends (user_id,friend_id) VALUES (%v,%v) ON DUPLICATE KEY UPDATE user_id=user_id", friendId, user.ID)
+	query := fmt.Sprintf("INSERT INTO user_friends (user_id,friend_id) VALUES (%v,%v;", friendId, user.ID)
 	return mySQL.DB.Exec(query).Error
 }
