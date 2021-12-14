@@ -2,7 +2,7 @@ package lib
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"socialgram/models"
 	"sync"
@@ -31,8 +31,15 @@ func GetDatabase() (SocialGramStore, error) {
 func newMySQLDatabase() (SocialGramStore, error) {
 	onceMySQL.Do(func() {
 		mySQL = new(MySQLDatabase)
-		dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
-		database, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
+		//dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+		dnsPostgres := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s",
+			DB_HOST,
+			DB_USER,
+			DB_PASSWORD,
+			DB_NAME,
+			DB_PORT)
+		//database, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
+		database, err := gorm.Open(postgres.Open(dnsPostgres), &gorm.Config{})
 		if err != nil {
 			connectionErr = err
 			return
