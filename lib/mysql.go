@@ -184,6 +184,6 @@ func (mySQL *MySQLDatabase) GetRequests(user *models.User) ([]models.User, error
 	return friends, nil
 }
 func (mySQL *MySQLDatabase) CreateFriend(user *models.User, friendId uint) error {
-	query := fmt.Sprintf("INSERT INTO user_friends (user_id,friend_id) VALUES (%v,%v;", friendId, user.ID)
+	query := fmt.Sprintf("INSERT INTO user_friends (user_id,friend_id) VALUES (%v,%v);", friendId, user.ID)
 	return mySQL.DB.Exec(query).Error
 }
