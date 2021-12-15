@@ -50,4 +50,5 @@ Install go language:
 A successful build of the file can be performed using the following command , given the prerequisites were installed correctly.
 
 bash
+
 make build
